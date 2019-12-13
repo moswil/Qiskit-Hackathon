@@ -51,16 +51,33 @@ pip install -r requirements.txt
     TOKEN='your-token`
     ```
     - Replace `'your-token'` with the actual account token
-2. Offline
-    - Just follow the below
+    - Just run the code on the next section
+2. Offline / Local
+    - Just follow the next section
 
-### Usage Of Code: 
-- Call the resize_image function to parse in the folder directory of the image dataset and the n by n pixels to down size the images. 
-```bash 
-image = resize_image(Directory, no. of pixel)		# n by n pixel dimension
+### Update the `main.py` file
+- Change the `DIR` variable to the directory that contains your images
+- Then run  
+```bash
+python main.py
 ```
 
-- Use the pca function to parse in the images and the required no. of components
-```bash 
-pca(images, no. of components) 
-```
+### Output
+#### Original Image (Classical data)
+<img src='MalariaDrugImagesGHS/CMP3-CID4156 (2013_10_04 18_39_26 UTC).png'>
+
+#### Quantified Image (Quantum Data)
+- bloch
+<img src='screenshots/image_3_bloch.png'>
+- circuit
+<img src='screenshots/image_3_circuit.png'>
+
+### Steps: 
+- Image preprocessing
+    - Image reading
+    - Image resizing (cropping)
+    - normalization
+    - dimensionality reduction (PCA)
+- Quantum Encoding
+    - done in [q_circuit.py](https://github.com/moswil/Qiskit-Hackathon/blob/master/q_circuit.py)
+

@@ -1,5 +1,3 @@
-import logging
-
 from quantum_data import QuantumData
 
 DIR = 'MalariaDrugImagesGHS'

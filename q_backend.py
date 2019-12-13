@@ -59,7 +59,8 @@ class QBitsLoader():
     
     def pca_recommendation(self, dir_, name, size=128):
         qubits = self.get_backend_qubits(name)
-        components = min(2**qubits, 512, len(os.listdir(dir_)))
+        FEATURE_LIMIT = 256
+        components = min(2**qubits, len(os.listdir(dir_)), FEATURE_LIMIT)
 
         
         images = resize_images(dir_, size)
