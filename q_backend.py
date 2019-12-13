@@ -10,8 +10,6 @@ import settings
 import math
 import os
 
-from base_exceptions import BackendNotFoundExeception
-
 from preprocessing import resize_images, pca
 
 
