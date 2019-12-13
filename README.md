@@ -69,6 +69,7 @@ python main.py
 #### Quantified Image (Quantum Data)
 - bloch
 <img src='screenshots/image_3_bloch.png'>
+
 - circuit
 <img src='screenshots/image_3_circuit.png'>
 
@@ -79,5 +80,5 @@ python main.py
     - normalization
     - dimensionality reduction (PCA)
 - Quantum Encoding
-    - done in [q_circuit.py](https://github.com/moswil/Qiskit-Hackathon/blob/master/q_circuit.py)
+    - done in [q_circuit.py](https://github.com/moswil/Qiskit-Hackathon/blob/master/quantum_data.py)
 

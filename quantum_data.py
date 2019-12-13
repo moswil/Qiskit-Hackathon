@@ -13,14 +13,15 @@ from q_backend import QBitsLoader
 
 
 class QuantumData:
-    def __init__(self, dir_, device=None):
+    def __init__(self, dir_, device=None, online=False):
         self.dir_ = dir_
         self.device = device
         self.length = 0
+        self.online = online
     def choose_device(self, name):
         self.device = name
     def transform(self, save=False):
-        qbit_loader = QBitsLoader(False)
+        qbit_loader = QBitsLoader(self.online)
         lower_dimensional_data = qbit_loader.pca_recommendation(self.dir_, self.device)
         quantum_data = []
         for image,feature in zip(os.listdir(self.dir_),lower_dimensional_data):
@@ -32,6 +33,8 @@ class QuantumData:
             self.length = vector.shape[0]
 
             cr, qbits = self.circuit(vector)
+
+            ## For plotting purposes, uncomment this
         #     print(list(range(qbits)))
         #     cr.add_register(ClassicalRegister(qbits))
         #     cr.measure(list(range(qbits)), list(range(qbits)))
