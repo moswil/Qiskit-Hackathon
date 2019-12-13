@@ -1,4 +1,5 @@
 import os
+import pickle
 
 import numpy as np
 import math
@@ -18,7 +19,7 @@ class QuantumData:
         self.length = 0
     def choose_device(self, name):
         self.device = name
-    def transform(self):
+    def transform(self, save=False):
         qbit_loader = QBitsLoader(False)
         lower_dimensional_data = qbit_loader.pca_recommendation(self.dir_, self.device)
         quantum_data = []
@@ -49,6 +50,8 @@ class QuantumData:
 
             # 
             # print(dir(cr))
+        if save:
+            pickle.dump(quantum_data, open(self.dir_+'_quantum_representation.pkl', 'wb'))
         return quantum_data
         
     def circuit(self, vec):
