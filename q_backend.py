@@ -7,52 +7,66 @@ from qiskit.visualization import *
 
 import settings
 
+import math
 import os
 
 from base_exceptions import BackendNotFoundExeception
 
+from preprocessing import resize_images, pca
+
 
 class QBitsLoader():
+    
     def __init__(self, online=False):
         self.online = online
 
         if self.online:
             TOKEN = os.getenv('TOKEN')
-            # Loading your IBM Q account(s)
             IBMQ.save_account(TOKEN, overwrite=True)
-            self.provider = IBMQ.load_account()
-            self.list_backends = self.provider.backends()
+            provider = IBMQ.load_account()
+            self.backends = provider.backends()
+            self.backends.append(Aer.backends())
         else:
-            self.list_backends = Aer.backends()
+            print('[INFO] Offline mode: only simulators can be accessed')
+            self.backends = Aer.backends()
 
     def get_backends(self):
-        """Returns a list of available backends
         """
-        return [backend.name() for backend in self.list_backends]
+            Returns a list of tuples with the available backends and their number of qubits
+        """
+        return [backend.name() for backend in self.backends]
 
     def get_backends_with_qubits(self):
-        """Returns a list of tuples with the available backends and their number of qubits
         """
-        return [(backend.name(), backend.configuration().n_qubits,) for backend in self.list_backends]
-
-    def call_backend(self, name):
-        """Returns a backend to work with
-
-        Arguments:
-        name: (str) The name of the backend to work with
-
-        Returns:
-        The backend specified
-
-        Raises:
-        BackendNotFoundExeception: if the backend given does not exist
+            Returns a list of tuples with the available backends and their number of qubits
         """
-        if name not in self.get_backends():
-            raise BackendNotFoundExeception(f"Backend '{name}' not defined")
-        else:
-            if self.online:
-                return self.provider.get_backend(name)
-            return Aer.get_backend(name)
+        return [(backend.name(), backend.configuration().n_qubits,) for backend in self.backends]
+    
+    def find_backend(self, name):
+        """
+            Finds a backend by its name
+        """
+        for backend in self.backends:
+            if name == backend.name():
+                return backend
+        raise ValueError(f"Backend '{name}' not found")
+    
+    def get_backend_qubits(self, name):
+        """
+            Returns the number of qubits a certain quantum device can handle
+        """
+        return self.find_backend(name).configuration().n_qubits
+    
+    def pca_recommendation(self, dir_, name, size=128):
+        qubits = self.get_backend_qubits(name)
+        components = min(2**qubits, 512, len(os.listdir(dir_)))
+
+        
+        images = resize_images(dir_, size)
+        lower_dimensional_data, variance = pca(images, components)
+        print('[INFO] Using ' + str(components) + ' number of components for PCA')
+        print('[INFO] This preserves ' + str(variance*100) + '% of the original variance in the images')
+        return lower_dimensional_data
 
 if __name__ == "__main__":
     q_bits_loader = QBitsLoader(True)
