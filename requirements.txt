@@ -1,0 +1,5 @@
+qiskit
+opencv-python
+Pillow
+resizeimage
+matplotlib
